@@ -7,8 +7,7 @@ public class Room {
     private int roomNumber;
     private int status;
 
-    public Room(int roomNumber, int status) {
+    public Room(int roomNumber){
         this.roomNumber = roomNumber;
-        this.status = status;
     }
 }

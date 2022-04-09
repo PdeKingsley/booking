@@ -21,7 +21,7 @@ public class HbBookingServiceImpl implements HbBookingService {
     @Override
     public int add(Booking booking) {
         //若房间已被预定，或房间号不合法，则返回0
-        if(booking.getRoom() < rooms.getNums() || !bookingLibrary.getBookingSummary().contains(booking.getGuest() +
+        if(booking.getRoom() < rooms.getNums() && !bookingLibrary.getBookingSummary().contains(booking.getGuest() +
                 " " + booking.getCreatedAt() + " " + booking.getRoom())){
             try {
                 //获取写锁
