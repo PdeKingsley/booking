@@ -1,5 +1,8 @@
 package com.hotel.booking.common;
 
+import lombok.Data;
+
+@Data
 public class CommonResult<T> {
     private long code;
     private String message;

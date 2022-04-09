@@ -1,6 +1,5 @@
 package com.hotel.booking;
 
-import com.hotel.booking.entity.Booking;
 import com.hotel.booking.entity.BookingLibrary;
 import com.hotel.booking.entity.Room;
 import com.hotel.booking.entity.Rooms;
@@ -26,11 +25,7 @@ public class BookingApplication {
 
     @Bean
     public BookingLibrary bookingLibrary() {
-        BookingLibrary bookingLibrary = new BookingLibrary();
-        bookingLibrary.setBookings(new ArrayList<>());
-        bookingLibrary.setGuestInfo(new HashMap<>());
-        bookingLibrary.getBookings().add(new Booking(1L,1, "guest1", "created1"));
-        return bookingLibrary;
+        return new BookingLibrary();
     }
 
     @Bean(value = BeanDefinition.SCOPE_PROTOTYPE)
