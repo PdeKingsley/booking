@@ -21,8 +21,7 @@ public class HbBookingServiceImpl implements HbBookingService {
     @Override
     public int add(Booking booking) {
         //若房间已被预定，或房间号不合法，则返回0
-        if(booking.getRoom() < rooms.getNums() && !bookingLibrary.getBookingSummary().contains(booking.getGuest() +
-                " " + booking.getCreatedAt() + " " + booking.getRoom())){
+        if(booking.getRoom() < rooms.getNums() && !bookingLibrary.getBookingSummary().contains(booking.getDate() + " " + booking.getRoom())){
             try {
                 //获取写锁
                 lock.writeLock().lock();
@@ -34,12 +33,12 @@ public class HbBookingServiceImpl implements HbBookingService {
                 bookings.add(booking);
                 bookingLibrary.getGuestInfo().put(booking.getGuest(), bookings);
                 //插入房间预定摘要
-                bookingLibrary.getBookingSummary().add(booking.getGuest() + " " + booking.getCreatedAt() + " " + booking.getRoom());
+                bookingLibrary.getBookingSummary().add(booking.getDate() + " " + booking.getRoom());
                 //插入房间每日预定信息
-                List<Integer> roomsMap = rooms.getRoomsMap().containsKey(booking.getCreatedAt()) ?
-                        rooms.getRoomsMap().get(booking.getCreatedAt()) : new ArrayList<>();
+                List<Integer> roomsMap = rooms.getRoomsMap().containsKey(booking.getDate()) ?
+                        rooms.getRoomsMap().get(booking.getDate()) : new ArrayList<>();
                 roomsMap.add(booking.getRoom());
-                rooms.getRoomsMap().put(booking.getCreatedAt(),roomsMap);
+                rooms.getRoomsMap().put(booking.getDate(),roomsMap);
             }finally {
                 lock.writeLock().unlock();
             }
@@ -55,7 +54,9 @@ public class HbBookingServiceImpl implements HbBookingService {
         try {
             lock.readLock().lock();
             if(rooms.getRoomsMap().containsKey(date)){
-                res.remove(rooms.getRoomsMap().get(date));
+                for(int room : rooms.getRoomsMap().get(date)){
+                    res.remove(rooms.getRooms().get(room));
+                }
             }
         }finally {
             lock.readLock().unlock();
